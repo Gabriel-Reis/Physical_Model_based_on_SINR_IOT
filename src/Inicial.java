@@ -22,27 +22,31 @@ public class Inicial {
 			System.out.println("Not soluble");
 	
 			//System.out.println(Calculacomunicacao(alpha, beta, dispositivos, ruido));
+			//System.out.println(dispositivos.toString());
 	}
 
 	public static boolean TestaValores(int alpha, int beta, ArrayList<dispositivo> dispositivos, double ruido) {
 		if(Calculacomunicacao(alpha, beta, dispositivos, ruido))
 			return true;
 		int tentativas = 0;
+		int acertos = 0;
 		double limite = conversor.converte_dBm_µW(25);
 		while(dispositivos.get(0).getPower() < limite) {
 			dispositivos.get(0).adddBm(1);
 			tentativas++;
 			if(Calculacomunicacao(alpha, beta, dispositivos, ruido)) {
 				System.out.println("Tentativas: " +tentativas);
-				System.out.println(dispositivos.toString());
+				acertos++;
+				System.out.println(dispositivos.toString() +acertos);
 				//return true;
 			}
 			while(dispositivos.get(1).getPower() < limite) {
 				dispositivos.get(1).adddBm(1);
 				tentativas++;
 				if(Calculacomunicacao(alpha, beta, dispositivos, ruido)) {
+					acertos++;
 					System.out.println("Tentativas: " +tentativas);
-					System.out.println(dispositivos.toString());
+					System.out.println(dispositivos.toString() +acertos);
 					//return true;
 				}
 				/*while(dispositivos.get(2).getPower() < limite) {
@@ -54,9 +58,10 @@ public class Inicial {
 				dispositivos.get(2).setPower(-25);
 				*/
 			}
+			
 			dispositivos.get(1).setPower(-25);
 		}
-		
+		System.out.println("acertos: " +acertos);
 	return false;
 	}
 	
@@ -101,15 +106,3 @@ public class Inicial {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-

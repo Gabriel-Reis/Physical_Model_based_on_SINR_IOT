@@ -14,9 +14,9 @@ public class conversor {
 		return converte_W_µW(converte_dBm_W(dBm));
 	}
 	
-	public static double converte_µW_dBm(double µW) {
+	public static Double converte_µW_dBm(double µW) {
 		if(µW == 0)
-			return 0;
+			return 0.0;
 		else
 			return converte_W_dBm(converte_µW_W(µW));
 	}
