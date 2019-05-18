@@ -35,9 +35,7 @@ public class dispositivo {
 	}
 	@Override
 	public String toString() {
-		return "[" + nome + ", power=" +conversor.converte_µW_dBm(power).intValue() +"]";
+		return "[" + nome + ", power=" +conversor.converte_µW_dBm(power).intValue() + ",dist=" +posicao +"]";
 	}
-	
-	
 	
 }
