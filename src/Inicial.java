@@ -9,20 +9,21 @@ public class Inicial {
 		ArrayList<dispositivo> dispositivos = new ArrayList<>();
 		
 		dispositivos.add(new dispositivo("a", -25 , 0)); //potencia em dBm
-		dispositivos.add(new dispositivo("b", -25, 4));
-		dispositivos.add(new dispositivo("c", 0, 5));
-		dispositivos.add(new dispositivo("d", 0, 7)); 
+		dispositivos.add(new dispositivo("b", -25, 3));
+		dispositivos.add(new dispositivo("c", -25, 6));
+		dispositivos.add(new dispositivo("d", 0, 9)); 
+		dispositivos.add(new dispositivo("e", 0, 20));
+		dispositivos.add(new dispositivo("f", 0, 19));
 		alpha = 3;
 		beta = 3;
 		ruido = conversor.converte_nW_µW(10); 	//em nanoWatts
 		
-		if(TestaValores(alpha, beta, dispositivos, ruido))
-			System.out.println(dispositivos.toString());
-		else
+		if(!TestaValores(alpha, beta, dispositivos, ruido))
 			System.out.println("Not soluble");
 	
-			//System.out.println(Calculacomunicacao(alpha, beta, dispositivos, ruido));
-			//System.out.println(dispositivos.toString());
+		//Teste Isolado
+		/*System.out.println(Calculacomunicacao(alpha, beta, dispositivos, ruido));
+		System.out.println(dispositivos.toString());*/
 	}
 
 	public static boolean TestaValores(int alpha, int beta, ArrayList<dispositivo> dispositivos, double ruido) {
@@ -30,39 +31,42 @@ public class Inicial {
 			return true;
 		int tentativas = 0;
 		int acertos = 0;
-		double limite = conversor.converte_dBm_µW(25);
-		while(dispositivos.get(0).getPower() < limite) {
-			dispositivos.get(0).adddBm(1);
+		int aux0 = -25, aux1 =-25, aux2=-25;
+		
+		while(aux0<25) {
+			aux0++;
+			dispositivos.get(0).setPower(aux0);
 			tentativas++;
 			if(Calculacomunicacao(alpha, beta, dispositivos, ruido)) {
-				System.out.println("Tentativas: " +tentativas);
 				acertos++;
-				System.out.println(dispositivos.toString() +acertos);
-				//return true;
+				System.out.println(dispositivos.toString());
 			}
-			while(dispositivos.get(1).getPower() < limite) {
-				dispositivos.get(1).adddBm(1);
+			while(aux1<25) {
+				aux1++;
+				dispositivos.get(1).setPower(aux1);
 				tentativas++;
 				if(Calculacomunicacao(alpha, beta, dispositivos, ruido)) {
 					acertos++;
-					System.out.println("Tentativas: " +tentativas);
-					System.out.println(dispositivos.toString() +acertos);
-					//return true;
+					System.out.println(dispositivos.toString());
 				}
-				/*while(dispositivos.get(2).getPower() < limite) {
-					dispositivos.get(2).adddBm(1);
+				while(aux2<25) {
+					aux2++;
+					dispositivos.get(2).setPower(aux2);
 					tentativas++;
-					if(Calculacomunicacao(alpha, beta, dispositivos, ruido))
-						return true;
+					if(Calculacomunicacao(alpha, beta, dispositivos, ruido)) {
+						acertos++;
+						System.out.println(dispositivos.toString());
+					}
 				}
-				dispositivos.get(2).setPower(-25);
-				*/
+				aux2=-25;
 			}
-			
-			dispositivos.get(1).setPower(-25);
+			aux1=-25;
 		}
-		System.out.println("acertos: " +acertos);
-	return false;
+		System.out.println("Tentativas: " +tentativas +", Acertos: " +acertos);
+		if(acertos > 0)
+			return true;
+		else
+			return false;
 	}
 	
 	
@@ -75,16 +79,11 @@ public class Inicial {
 			dispositivo a = dispositivos.get(i);
 			dispositivo b = dispositivos.get(dispositivos.size()-i-1);
 			
-			//Força de comunicação
-			// potencia / distancia ^ alpha
 			double forca = (a.getPower() / (Math.pow(Math.abs(a.getPosicao()-b.getPosicao()),alpha)));
-			// DIVIDE POR
-			// Ruido + potencia / distancia ^ alpha para cada dispositivo
 			double interferencia =  CalculaInterferencia(alpha, dispositivos, i);
 			
 			double result = forca / (ruido+interferencia);
 			//System.out.println("SINR(" +a.getNome() +"-" +b.getNome() +") = " +result);
-
 			if ( result < beta)
 				return false;
 		}
@@ -99,7 +98,6 @@ public class Inicial {
 				dispositivo emissor = dispositivos.get(i);			
 				int dist = Math.abs(alvo.getPosicao()-emissor.getPosicao());
 				retorno +=  emissor.getPower() / (Math.pow(dist,alpha));
-				
 			}
 		}
 		return retorno;
