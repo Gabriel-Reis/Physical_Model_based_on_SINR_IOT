@@ -15,7 +15,7 @@ public class dispositivo {
 	}
 	
 	public void adddBm(int dBm) {
-		this.power += conversor.converte_W_µW(conversor.converte_dBm_W(dBm));
+		this.power += conversor.converte_dBm_µW(dBm);
 	}
 	
 	public String getNome() {
@@ -42,7 +42,7 @@ public class dispositivo {
 	
 	@Override
 	public String toString() {
-		return "[nome=" + nome + ", power=" + power +"]";
+		return "[nome=" + nome + ", power=" + power + " " +conversor.converte_µW_dBm(power) +"]";
 	}
 	
 	

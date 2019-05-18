@@ -6,7 +6,8 @@ public class conversor {
 	}
 	
 	public static double converte_W_dBm(double W) {
-		return ( 10*Math.log10(1000*0.01) );
+		//return ( 10*Math.log10(1000*W) );
+		return 10*Math.log10(W*1000);
 	}
 	
 	public static double converte_dBm_µW(double dBm) {
@@ -14,7 +15,10 @@ public class conversor {
 	}
 	
 	public static double converte_µW_dBm(double µW) {
-		return converte_W_dBm(converte_µW_W(µW));
+		if(µW == 0)
+			return 0;
+		else
+			return converte_W_dBm(converte_µW_W(µW));
 	}
 	
 	public static double converte_W_nW(double W) {
