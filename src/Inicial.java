@@ -15,18 +15,18 @@ public class Inicial {
 		dispositivos.add(new dispositivo("d", 0, 9)); 
 		dispositivos.add(new dispositivo("e", 0, 16));
 		dispositivos.add(new dispositivo("f", 0, 19));
-		alpha = 3;								//Path-loss exponent
-		beta = 3;								//Minimum signal-to- interference ratio
 		ruido = conversor.converte_nW_µW(10); 	//em nanoWatts
 		int repeticoes = 0;
 		int limiteDistancia;
 		
 		do {
+			alpha = new Random().nextInt(2)+1;								//Path-loss exponent
+			beta =  new Random().nextInt(2)+1;								//Minimum signal-to- interference ratio
 			limiteDistancia = new Random().nextInt(20)+dispositivos.size()+8;
 			variaDistanciaAleatoria(dispositivos, limiteDistancia);
 			repeticoes++;
-			variaPotencia(alpha, beta, dispositivos, ruido);
-		} while( repeticoes < 1000);
+			System.out.println(repeticoes);
+		} while(variaPotencia(alpha, beta, dispositivos, ruido) != true);
 		
 		//Teste Isolado
 		/*System.out.println(Calculacomunicacao(alpha, beta, dispositivos, ruido));
